@@ -9,21 +9,21 @@ COPY ./Cargo.lock ./Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
 
 # this build step will cache your dependencies
-RUN CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --release
+RUN CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build
 RUN rm src/*.rs
 
 # copy your source tree
 COPY ./src ./src
 
 # build for release
-RUN rm ./target/release/deps/rust_gh_action*
-RUN CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --release
+RUN rm ./target/debug/deps/rust_gh_action*
+RUN CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build
 
 # our final base
 FROM gcr.io/distroless/cc AS runtime
 
 # copy the build artifact from the build stage
-COPY --from=build /rust-gh-action/target/release/rust-gh-action .
+COPY --from=build /rust-gh-action/target/debug/rust-gh-action .
 
 # set the startup command to run your binary
 ENTRYPOINT ["/rust-gh-action"]
