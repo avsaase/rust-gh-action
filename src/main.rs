@@ -16,5 +16,5 @@ fn main() {
         .into_json()
         .unwrap();
 
-    println!("{}", response["headers"]["referer"]);
+    println!("{}", response["headers"]["Referer"]);
 }
