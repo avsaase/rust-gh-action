@@ -1,0 +1,13 @@
+name: rust-gh-action
+description: nothing
+author: Alexander van Saase <alexander.vansaase.ext@adevinta.com>
+inputs:
+  dummy-input:
+    description: "A dummy input"
+    required: false
+    default: ""
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.dummy-input }}
