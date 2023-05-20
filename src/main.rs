@@ -1,10 +1,9 @@
-use std::{env, fs::write};
+use std::{env, fs::write, process::exit};
 
 use ureq::serde_json;
 
 fn main() {
-    let github_output_path = env::var("GITHUB_OUTPUT").unwrap();
-    println!("{}", &github_output_path);
+    let output_path = "output".to_string();
 
     let args: Vec<String> = env::args().collect();
     let url = &args[1];
@@ -13,15 +12,17 @@ fn main() {
 
     match ureq::get(url).call() {
         Ok(response) => match response.into_json::<serde_json::Value>() {
-            Ok(json) => write(github_output_path, format!("response={json}")).unwrap(),
+            Ok(json) => write(output_path, format!("response={json}")).unwrap(),
             Err(error) => {
                 eprint!("Error decoding response: {}", error);
-                write(github_output_path, format!("error={error}")).unwrap();
+                write(output_path, format!("error={error}")).unwrap();
+                exit(1);
             }
         },
         Err(error) => {
             eprintln!("Error: {error}");
-            write(github_output_path, format!("error={error}")).unwrap();
+            write(output_path, format!("error={error}")).unwrap();
+            exit(1);
         }
     }
 }

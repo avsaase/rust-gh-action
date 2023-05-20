@@ -25,5 +25,5 @@ runs:
       shell: bash
     - name: Run container
       id: run-container
-      run: docker run -e GITHUB_OUTPUT rust-gh-action ${{ inputs.url }}
+      run: docker run -v $GITHUB_OUTPUT:/output rust-gh-action ${{ inputs.url }}
       shell: bash
