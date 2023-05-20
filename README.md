@@ -8,17 +8,20 @@ GitHub Actions supports container-based actions but unfortunately it does not ap
 
 ## Inputs
 
-## `url`
+### `url`
 
 **Required** URL to make a HTTP GET request to. Default `"https://httpbin.org/get"`.
 
+### `cache`
+Whether or not to use layer caching for the Docker builds. Defautls to "true". If your Rust binary has few depenencies then recompiling it on every workflow run may be faster than fetching layers from the cache. Caching layers on the first run of the action can take a few minutes.
+
 ## Outputs
 
-## `response`
+### `response`
 
 JSON response from the GET request.
 
-## `error`
+### `error`
 
 Any error that occured with either making the request or decoding the response.
 

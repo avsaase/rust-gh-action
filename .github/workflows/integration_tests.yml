@@ -4,6 +4,7 @@ on:
 
 jobs:
   test_success:
+    name: Test success
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,6 +18,7 @@ jobs:
         run: echo "${{ steps.run-action.outputs.response }}"
 
   test_invalid_url:
+    name: Test error (invalid URL)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,3 +37,18 @@ jobs:
         run: echo "Succeeded unexpectedly" && exit 1
       - name: Print output
         run: echo "${{ steps.run-action.outputs.error }}"
+  
+  test_without_cache:
+    name: Test success without cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run action
+        uses: ./
+        id: run-action
+        with: 
+          url: "https://httpbin.org/get"
+          cache: "false"
+      - name: Print output
+        run: echo "${{ steps.run-action.outputs.response }}"
