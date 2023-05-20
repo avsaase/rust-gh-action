@@ -1,4 +1,4 @@
-use std::{env, error::Error, fs::write, process::exit};
+use std::{env, error::Error, fmt::Display, fs::write, process::exit};
 
 use ureq::serde_json;
 
@@ -9,17 +9,20 @@ fn main() {
     let url = &args[1];
 
     println!("Making GET request to {}", &url);
-    match ureq::get(url).call() {
-        Ok(response) => match response.into_json::<serde_json::Value>() {
-            Ok(json) => write(OUTPUT_PATH, format!("response={json}")).unwrap(),
-            Err(error) => return_error(error),
-        },
-        Err(error) => return_error(error),
-    }
+    let response = ureq::get(url).call().map_err(return_error).unwrap();
+    let json = response
+        .into_json::<serde_json::Value>()
+        .map_err(return_error)
+        .unwrap();
+    return_output("response", json);
 }
 
-fn return_error(error: impl Error) {
-    eprintln!("Error: {}", error);
-    write(OUTPUT_PATH, format!("error={}", error)).unwrap();
+fn return_output<T: Display>(key: &str, value: T) {
+    println!("{}:{}", key, value);
+    write(OUTPUT_PATH, format!("{}={}", key, value)).unwrap();
+}
+
+fn return_error<E: Error>(error: E) {
+    return_output("error", error);
     exit(1);
 }
