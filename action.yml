@@ -3,10 +3,14 @@ description: "Test action to try developng GitHubActions in Rust"
 inputs:
   dummy-input:
     description: "A dummy input"
-    required: false
-    default: ""
+    required: true
+    default: "blah"
 runs:
-  using: "docker"
-  image: "Dockerfile"
-  args:
-    - ${{ inputs.dummy-input }}
+  using: "composite"
+  steps:
+    - name: Build docker image
+      run: docker build -t rust-gh-action .
+      shell: bash
+    - name: Run action
+      run: docker run rust-gh-action ${{ inputs.dummy-input }}
+      shell: bash
