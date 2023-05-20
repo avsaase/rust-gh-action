@@ -1,20 +1,26 @@
-use std::env;
+use std::{env, fs::write};
 
 use ureq::serde_json;
 
 fn main() {
-    // let github_output_path = env::var("GITHUB_OUTPUT").unwrap();
+    let github_output_path = env::var("GITHUB_OUTPUT").unwrap();
 
     let args: Vec<String> = env::args().collect();
-    let input = &args[1];
+    let url = &args[1];
 
-    println!("{}", input);
+    println!("Making GET request to {}", &url);
 
-    let response: serde_json::Value = ureq::get("https://httpbin.org/get")
-        .call()
-        .unwrap()
-        .into_json()
-        .unwrap();
-
-    println!("{}", response);
+    match ureq::get(url).call() {
+        Ok(response) => match response.into_json::<serde_json::Value>() {
+            Ok(json) => write(github_output_path, format!("response={json}")).unwrap(),
+            Err(error) => {
+                eprint!("Error decoding response: {}", error);
+                write(github_output_path, format!("error={error}")).unwrap();
+            }
+        },
+        Err(error) => {
+            eprintln!("Error: {error}");
+            write(github_output_path, format!("error={error}")).unwrap();
+        }
+    }
 }

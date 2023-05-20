@@ -1,10 +1,20 @@
 name: rust-gh-action
 description: "Test action to try developng GitHubActions in Rust"
+
 inputs:
-  dummy-input:
-    description: "A dummy input"
+  url:
+    description: "The URL to call"
     required: true
-    default: "blah"
+    default: "https://httpbin.org/get"
+
+outputs:
+  error:
+    description: "Any error that may occur"
+    value: ${{ steps.run-container.outputs.error }}
+  response:
+    description: "JSON response from calling the input URL"
+    value: ${{ steps.run-container.outputs.response }}
+
 runs:
   using: "composite"
   steps:
@@ -13,6 +23,7 @@ runs:
     - name: Build docker image
       run: docker build -t rust-gh-action .
       shell: bash
-    - name: Run action
-      run: docker run rust-gh-action ${{ inputs.dummy-input }}
+    - name: Run container
+      id: run-container
+      run: docker run rust-gh-action ${{ inputs.url }}
       shell: bash
