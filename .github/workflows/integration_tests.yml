@@ -8,5 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./
+        id: run-action
         with: 
           url: "https://httpbin.org/get"
+      - run: echo "${{ steps.run-action.outputs.response }}"
