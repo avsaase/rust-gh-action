@@ -16,7 +16,7 @@ jobs:
       - name: Print output
         run: echo "${{ steps.run-action.outputs.response }}"
 
-  test_not_found:
+  test_invalid_url:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
