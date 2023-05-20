@@ -3,7 +3,7 @@ description: "Test action to try developng GitHubActions in Rust"
 
 inputs:
   url:
-    description: "The URL to call"
+    description: "The URL to make a HTTP GET request to"
     required: true
     default: "https://httpbin.org/get"
 
