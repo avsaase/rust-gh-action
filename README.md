@@ -1,6 +1,6 @@
-# rust-gh-action
 
-Example GitHub Action 
+
+
 
 # rust-gh-action
 
