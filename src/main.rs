@@ -4,6 +4,7 @@ use ureq::serde_json;
 
 fn main() {
     let github_output_path = env::var("GITHUB_OUTPUT").unwrap();
+    println!("{}", &github_output_path);
 
     let args: Vec<String> = env::args().collect();
     let url = &args[1];
