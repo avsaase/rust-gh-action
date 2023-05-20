@@ -6,9 +6,12 @@ jobs:
   test_success:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: ./
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run action
+        uses: ./
         id: run-action
         with: 
           url: "https://httpbin.org/get"
-      - run: echo "${{ steps.run-action.outputs.response }}"
+      - name: Print output
+        run: echo "${{ steps.run-action.outputs.response }}"
