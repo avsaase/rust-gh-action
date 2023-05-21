@@ -1,4 +1,4 @@
-use std::{env, error::Error, fmt::Display, fs::write, process::exit};
+use std::{env, error::Error, fmt::Display, fs::write};
 
 use ureq::serde_json;
 
@@ -24,5 +24,5 @@ fn return_output<T: Display>(key: &str, value: T) {
 
 fn return_error<E: Error>(error: E) {
     return_output("error", error);
-    exit(1);
+    // exit(1);
 }

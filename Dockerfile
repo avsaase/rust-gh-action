@@ -1,6 +1,5 @@
 FROM rust:1.69 as build
 
-
 # create a new empty shell project
 RUN USER=root cargo new --bin rust-gh-action
 WORKDIR /rust-gh-action
